@@ -10,20 +10,18 @@ class Question {
   });
 
   factory Question.fromJson(Map<String, dynamic> json) {
-    // combine correct + incorrect answers into one list
     List<String> allOptions = List<String>.from(json['incorrect_answers']);
     allOptions.add(json['correct_answer']);
     allOptions.shuffle();
 
     return Question(
-      question: _decodeHtml(json['question']),
-      correctAnswer: _decodeHtml(json['correct_answer']),
-      options: allOptions.map((e) => _decodeHtml(e)).toList(),
+      question: _decode(json['question']),
+      correctAnswer: _decode(json['correct_answer']),
+      options: allOptions.map((e) => _decode(e)).toList(),
     );
   }
 
-  // handle html entities from the api
-  static String _decodeHtml(String text) {
+  static String _decode(String text) {
     return text
         .replaceAll('&quot;', '"')
         .replaceAll('&#039;', "'")

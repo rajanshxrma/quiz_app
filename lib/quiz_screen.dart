@@ -23,7 +23,6 @@ class _QuizScreenState extends State<QuizScreen> {
     _loadQuestions();
   }
 
-  // fetch questions from api
   void _loadQuestions() async {
     try {
       final questions = await ApiService.fetchQuestions();
@@ -37,13 +36,12 @@ class _QuizScreenState extends State<QuizScreen> {
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load questions: $e')),
+          SnackBar(content: Text('failed to load: $e')),
         );
       }
     }
   }
 
-  // check if selected answer is correct
   void _answerQuestion(String selected) {
     if (_answered) return;
 
@@ -56,7 +54,6 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
-  // move to next question
   void _nextQuestion() {
     if (_currentQuestionIndex < _questions.length - 1) {
       setState(() {
@@ -67,7 +64,6 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
-  // restart the quiz
   void _restartQuiz() {
     setState(() {
       _currentQuestionIndex = 0;
@@ -79,7 +75,6 @@ class _QuizScreenState extends State<QuizScreen> {
     _loadQuestions();
   }
 
-  // get button color based on answer state
   Color _getButtonColor(String option) {
     if (!_answered) return Colors.blue;
     if (option == _questions[_currentQuestionIndex].correctAnswer) {
@@ -103,11 +98,11 @@ class _QuizScreenState extends State<QuizScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Could not load questions.'),
+              const Text('could not load questions'),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _restartQuiz,
-                child: const Text('Try Again'),
+                child: const Text('try again'),
               ),
             ],
           ),
@@ -115,10 +110,9 @@ class _QuizScreenState extends State<QuizScreen> {
       );
     }
 
-    // show final score screen
     if (_currentQuestionIndex >= _questions.length - 1 && _answered) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Quiz Complete')),
+        appBar: AppBar(title: const Text('done')),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -126,7 +120,7 @@ class _QuizScreenState extends State<QuizScreen> {
               const Icon(Icons.emoji_events, size: 80, color: Colors.amber),
               const SizedBox(height: 20),
               Text(
-                'Your Score',
+                'score',
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 10),
@@ -142,7 +136,7 @@ class _QuizScreenState extends State<QuizScreen> {
               ElevatedButton.icon(
                 onPressed: _restartQuiz,
                 icon: const Icon(Icons.refresh),
-                label: const Text('Play Again'),
+                label: const Text('play again'),
               ),
             ],
           ),
@@ -154,13 +148,13 @@ class _QuizScreenState extends State<QuizScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Quiz App'),
+        title: const Text('quiz'),
         actions: [
           Center(
             child: Padding(
               padding: const EdgeInsets.only(right: 16),
               child: Text(
-                'Score: $_score',
+                'score: $_score',
                 style: const TextStyle(fontSize: 18),
               ),
             ),
@@ -172,26 +166,21 @@ class _QuizScreenState extends State<QuizScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // progress indicator
             LinearProgressIndicator(
               value: (_currentQuestionIndex + 1) / _questions.length,
             ),
             const SizedBox(height: 8),
             Text(
-              'Question ${_currentQuestionIndex + 1} of ${_questions.length}',
+              'question ${_currentQuestionIndex + 1} of ${_questions.length}',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.grey),
             ),
             const SizedBox(height: 24),
-
-            // question text
             Text(
               question.question,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 24),
-
-            // answer buttons
             ...question.options.map((option) {
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
@@ -211,17 +200,14 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
               );
             }),
-
             const Spacer(),
-
-            // next button
             if (_answered && _currentQuestionIndex < _questions.length - 1)
               ElevatedButton(
                 onPressed: _nextQuestion,
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Next Question', style: TextStyle(fontSize: 18)),
+                child: const Text('next', style: TextStyle(fontSize: 18)),
               ),
           ],
         ),
